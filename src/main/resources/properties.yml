@@ -1,0 +1,5 @@
+name: DropletMeeting
+version: dev-SNAPSHOT
+website: http://spout.org
+main: org.spout.droplet.meeting.DropletMeeting
+platform: SERVER
