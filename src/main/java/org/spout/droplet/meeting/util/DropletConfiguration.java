@@ -38,6 +38,8 @@ import org.spout.api.util.config.yaml.YamlConfiguration;
 import org.spout.droplet.meeting.DropletMeeting;
 
 public class DropletConfiguration extends ConfigurationHolderConfiguration {
+	public static final ConfigurationHolder TIME_ZONE = new ConfigurationHolder("EST", "time-zone");
+
 	public DropletConfiguration() {
 		super(new YamlConfiguration(new File(DropletMeeting.getInstance().getDataFolder(), "config.yml")));
 	}
@@ -74,6 +76,7 @@ public class DropletConfiguration extends ConfigurationHolderConfiguration {
 
 	public void setStaff(List<String> staff) {
 		getNode("staff").setValue(staff);
+		save();
 	}
 
 	public void addStaff(String staff) {
@@ -82,14 +85,12 @@ public class DropletConfiguration extends ConfigurationHolderConfiguration {
 			s.add(staff);
 		}
 		setStaff(s);
-		save();
 	}
 
 	public void removeStaff(String staff) {
 		List<String> s = getStaff();
 		s.remove(staff);
 		setStaff(s);
-		save();
 	}
 
 	public List<String> getVoiced() {
@@ -98,6 +99,7 @@ public class DropletConfiguration extends ConfigurationHolderConfiguration {
 
 	public void setVoiced(List<String> voiced) {
 		getNode("voiced").setValue(voiced);
+		save();
 	}
 
 	public void addVoiced(String voiced) {
@@ -106,13 +108,11 @@ public class DropletConfiguration extends ConfigurationHolderConfiguration {
 			s.add(voiced);
 		}
 		setVoiced(s);
-		save();
 	}
 
 	public void removeVoiced(String voiced) {
 		List<String> s = getVoiced();
 		s.remove(voiced);
 		setVoiced(s);
-		save();
 	}
 }
