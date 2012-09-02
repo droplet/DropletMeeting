@@ -29,6 +29,7 @@ package org.spout.droplet.meeting;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import org.spout.api.Spout;
 import org.spout.api.command.CommandRegistrationsFactory;
@@ -100,11 +101,11 @@ public class DropletMeeting extends CommonPlugin {
 	}
 
 	public String getFormattedDate() {
-		return dateFormat.format(Calendar.getInstance().getTime());
+		return dateFormat.format(Calendar.getInstance(TimeZone.getTimeZone(DropletConfiguration.TIME_ZONE.getString())).getTime());
 	}
 
 	public String getFormattedTime() {
-		return timeFormat.format(Calendar.getInstance().getTime());
+		return timeFormat.format(Calendar.getInstance(TimeZone.getTimeZone(DropletConfiguration.TIME_ZONE.getString())).getTime());
 	}
 
 	public boolean isMeetingInProgress() {

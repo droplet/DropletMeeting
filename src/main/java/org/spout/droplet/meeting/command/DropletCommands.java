@@ -26,6 +26,8 @@
  */
 package org.spout.droplet.meeting.command;
 
+import java.util.TimeZone;
+
 import org.spout.api.Server;
 import org.spout.api.Spout;
 import org.spout.api.chat.ChatArguments;
@@ -114,7 +116,9 @@ public class DropletCommands {
 			throw new CommandException("A meeting is already in progress!");
 		}
 		plugin.start();
-		((Server) Spout.getEngine()).broadcastMessage(ChatStyle.BRIGHT_GREEN, "Meeting in progress as of ", plugin.getFormattedDate(), " ", plugin.getFormattedTime());
+		((Server) Spout.getEngine()).broadcastMessage(ChatStyle.BRIGHT_GREEN, "Meeting in progress as of ", plugin.getFormattedDate(), " ", plugin.getFormattedTime(), " ", TimeZone.getTimeZone(DropletConfiguration.TIME_ZONE.getString()).getDisplayName());
+
+
 	}
 
 	@Command(aliases = "end", desc = "End a meeting", min = 0, max = 0)
@@ -129,6 +133,6 @@ public class DropletCommands {
 			throw new CommandException("There is no meeting in progress!");
 		}
 		plugin.end();
-		((Server) Spout.getEngine()).broadcastMessage(ChatStyle.BRIGHT_GREEN, "Meeting adjourned as of ", plugin.getFormattedDate(), " ", plugin.getFormattedTime());
+		((Server) Spout.getEngine()).broadcastMessage(ChatStyle.BRIGHT_GREEN, "Meeting adjourned as of ", plugin.getFormattedDate(), " ", plugin.getFormattedTime(), " ", TimeZone.getTimeZone(DropletConfiguration.TIME_ZONE.getString()).getDisplayName());
 	}
 }

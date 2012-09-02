@@ -38,7 +38,7 @@ import org.spout.api.util.config.yaml.YamlConfiguration;
 import org.spout.droplet.meeting.DropletMeeting;
 
 public class DropletConfiguration extends ConfigurationHolderConfiguration {
-	public static final ConfigurationHolder TIME_ZONE = new ConfigurationHolder("EST", "time-zone");
+	public static final ConfigurationHolder TIME_ZONE = new ConfigurationHolder("America/New_York", "time-zone");
 
 	public DropletConfiguration() {
 		super(new YamlConfiguration(new File(DropletMeeting.getInstance().getDataFolder(), "config.yml")));
