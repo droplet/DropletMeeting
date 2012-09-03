@@ -30,6 +30,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.spout.api.entity.Player;
 import org.spout.api.exception.ConfigurationException;
 import org.spout.api.util.config.ConfigurationHolder;
 import org.spout.api.util.config.ConfigurationHolderConfiguration;
@@ -39,6 +40,9 @@ import org.spout.droplet.meeting.DropletMeeting;
 
 public class DropletConfiguration extends ConfigurationHolderConfiguration {
 	public static final ConfigurationHolder TIME_ZONE = new ConfigurationHolder("America/New_York", "time-zone");
+	public static final ConfigurationHolder MUTE_MESSAGE = new ConfigurationHolder("{{RED}}You don't have permission to talk during a meeting.", "mute-message");
+	public static final ConfigurationHolder START_MESSAGE = new ConfigurationHolder("{{BRIGHT_GREEN}}Meeting in progress as of %date% %time% %time_zone%", "start-message");
+	public static final ConfigurationHolder END_MESSAGE = new ConfigurationHolder("{{BRIGHT_GREEN}}Meeting adjourned as of %date% %time% %time_zone%", "end-message");
 
 	public DropletConfiguration() {
 		super(new YamlConfiguration(new File(DropletMeeting.getInstance().getDataFolder(), "config.yml")));
@@ -48,13 +52,6 @@ public class DropletConfiguration extends ConfigurationHolderConfiguration {
 	public void load() {
 		try {
 			super.load();
-			setWritesDefaults(true);
-			if (!getNode("staff").isAttached()) {
-				getNode("staff").setValue(Arrays.asList("Afforess", "alta189", "narrowtux", "Olloth", "Top_Cat", "Wulfspider"));
-			}
-			if (!getNode("voiced").isAttached()) {
-				getNode("voiced").setValue(Arrays.asList("Contex", "NinjaGrinch", "mau5ie", "Owexz", "RoyAwesome", "Rycochet", "W1ndwaker", "Zidane", "zml2008"));
-			}
 			super.save();
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
@@ -68,51 +65,5 @@ public class DropletConfiguration extends ConfigurationHolderConfiguration {
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public List<String> getStaff() {
-		return getNode("staff").getStringList();
-	}
-
-	public void setStaff(List<String> staff) {
-		getNode("staff").setValue(staff);
-		save();
-	}
-
-	public void addStaff(String staff) {
-		List<String> s = getStaff();
-		if (!s.contains(staff)) {
-			s.add(staff);
-		}
-		setStaff(s);
-	}
-
-	public void removeStaff(String staff) {
-		List<String> s = getStaff();
-		s.remove(staff);
-		setStaff(s);
-	}
-
-	public List<String> getVoiced() {
-		return getNode("voiced").getStringList();
-	}
-
-	public void setVoiced(List<String> voiced) {
-		getNode("voiced").setValue(voiced);
-		save();
-	}
-
-	public void addVoiced(String voiced) {
-		List<String> s = getVoiced();
-		if (!s.contains(voiced)) {
-			s.add(voiced);
-		}
-		setVoiced(s);
-	}
-
-	public void removeVoiced(String voiced) {
-		List<String> s = getVoiced();
-		s.remove(voiced);
-		setVoiced(s);
 	}
 }

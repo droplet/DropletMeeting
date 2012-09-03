@@ -40,25 +40,17 @@ import org.spout.droplet.meeting.util.MeetingLog;
 public class DropletListener implements Listener {
 	@EventHandler(order = Order.LATEST)
 	public void playerChat(PlayerChatEvent event) {
-
 		Player player = event.getPlayer();
-		String playerName = player.getName();
 		DropletMeeting plugin = DropletMeeting.getInstance();
 		DropletConfiguration config = plugin.getConfiguration();
-
-		// Format the message
-		// TODO: Load format from config
 		if (plugin.isMeetingInProgress()) {
-			if (config.getStaff().contains(playerName)) {
-				event.setFormat(new ChatArguments("[", ChatStyle.RED, "Staff", ChatStyle.WHITE, "] ", PlayerChatEvent.NAME, ": ", PlayerChatEvent.MESSAGE));
-			} else if (config.getVoiced().contains(playerName)) {
-				event.setFormat(new ChatArguments("[", ChatStyle.BLUE, "Voiced", ChatStyle.WHITE, "] ", PlayerChatEvent.NAME, ": ", PlayerChatEvent.MESSAGE));
-			} else {
-				player.sendMessage(ChatStyle.RED, "You don't have permission to talk during a meeting.");
+			if (!player.hasPermission("dropletmeeting.voiced")) {
+				player.sendMessage(ChatArguments.fromString(DropletConfiguration.MUTE_MESSAGE.getString()));
 				event.setCancelled(true);
+				return;
 			}
 			MeetingLog meetingLog = plugin.getMeetingLog();
-			if (meetingLog != null && !event.isCancelled()) {
+			if (meetingLog != null) {
 				ChatArguments template = event.getFormat().getArguments();
 				template.setPlaceHolder(PlayerChatEvent.NAME, new ChatArguments(player.getDisplayName()));
 				template.setPlaceHolder(PlayerChatEvent.MESSAGE, event.getMessage());

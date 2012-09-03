@@ -47,63 +47,6 @@ public class DropletCommands {
 	private final DropletMeeting plugin = DropletMeeting.getInstance();
 	private final DropletConfiguration config = plugin.getConfiguration();
 
-	@Command(aliases = "staff", usage = "<add|remove> <player>", desc = "Add or remove a player from the staff list.", min = 2, max = 2)
-	@CommandPermissions("dropletmeeting.command.staff")
-	public void staff(CommandContext args, CommandSource source) throws CommandException {
-		String action = args.getString(0);
-		String staff = args.getString(1);
-		ChatArguments message = new ChatArguments(ChatStyle.BRIGHT_GREEN, staff, " was ");
-		Player player = args.getPlayer(1, true);
-		if (action.equalsIgnoreCase("add")) {
-			message.append("added to the staff list.");
-			if (player != null) {
-				player.sendMessage(ChatStyle.BRIGHT_GREEN, "You have been added to the staff list!");
-			} else {
-				message.append(" (Offline)");
-			}
-			config.addStaff(staff);
-			config.removeVoiced(staff);
-		} else if (action.equalsIgnoreCase("remove")) {
-			message.append("removed from the staff list.");
-			if (player != null) {
-				player.sendMessage(ChatStyle.BRIGHT_GREEN, "You have been removed from the staff list!");
-			} else {
-				message.append(" (Offline)");
-			}
-			config.removeStaff(staff);
-		}
-		source.sendMessage(message);
-	}
-
-	@Command(aliases = "voice", usage = "<player>", desc = "Voice a player", min = 1, max = 1)
-	@CommandPermissions("dropletmeeting.command.voice")
-	public void voice(CommandContext args, CommandSource source) throws CommandException {
-		String voiced = args.getString(0);
-		config.addVoiced(voiced);
-		config.removeStaff(voiced);
-		Player player = args.getPlayer(0, true);
-		if (player != null) {
-			source.sendMessage(ChatStyle.BRIGHT_GREEN, "Voiced ", player.getName(), ".");
-			player.sendMessage(ChatStyle.BRIGHT_GREEN, "You have been voiced!");
-		} else {
-			source.sendMessage(ChatStyle.BRIGHT_GREEN, "Voiced offline player ", voiced, ".");
-		}
-	}
-
-	@Command(aliases = "devoice", usage = "<player>", desc = "Devoice a player", min = 1, max = 1)
-	@CommandPermissions("dropletmeeting.command.voice")
-	public void devoice(CommandContext args, CommandSource source) throws CommandException {
-		String devoiced = args.getString(0);
-		config.removeVoiced(devoiced);
-		Player player = args.getPlayer(0, true);
-		if (player != null) {
-			source.sendMessage(ChatStyle.BRIGHT_GREEN, "Devoiced ", player.getName(), ".");
-			player.sendMessage(ChatStyle.BRIGHT_GREEN, "You have been devoiced!");
-		} else {
-			source.sendMessage(ChatStyle.BRIGHT_GREEN, "Devoiced offline player '", devoiced, ".");
-		}
-	}
-
 	@Command(aliases = "start", desc = "Start a meeting", min = 0, max = 0)
 	@CommandPermissions("dropletmeeting.command.start")
 	public void start(CommandContext args, CommandSource source) throws CommandException {
@@ -111,14 +54,11 @@ public class DropletCommands {
 		if (p != Platform.SERVER && p != Platform.PROXY) {
 			throw new CommandException("Meetings are only available in server mode.");
 		}
-
 		if (plugin.isMeetingInProgress()) {
 			throw new CommandException("A meeting is already in progress!");
 		}
 		plugin.start();
-		((Server) Spout.getEngine()).broadcastMessage(ChatStyle.BRIGHT_GREEN, "Meeting in progress as of ", plugin.getFormattedDate(), " ", plugin.getFormattedTime(), " ", TimeZone.getTimeZone(DropletConfiguration.TIME_ZONE.getString()).getDisplayName());
-
-
+		((Server) Spout.getEngine()).broadcastMessage(ChatArguments.fromString(formatDate(DropletConfiguration.START_MESSAGE.getString())));
 	}
 
 	@Command(aliases = "end", desc = "End a meeting", min = 0, max = 0)
@@ -128,11 +68,14 @@ public class DropletCommands {
 		if (p != Platform.SERVER && p != Platform.PROXY) {
 			throw new CommandException("Meetings are only available in server mode.");
 		}
-
 		if (!plugin.isMeetingInProgress()) {
 			throw new CommandException("There is no meeting in progress!");
 		}
 		plugin.end();
-		((Server) Spout.getEngine()).broadcastMessage(ChatStyle.BRIGHT_GREEN, "Meeting adjourned as of ", plugin.getFormattedDate(), " ", plugin.getFormattedTime(), " ", TimeZone.getTimeZone(DropletConfiguration.TIME_ZONE.getString()).getDisplayName());
+		((Server) Spout.getEngine()).broadcastMessage(ChatArguments.fromString(formatDate(DropletConfiguration.END_MESSAGE.getString())));
+	}
+
+	private String formatDate(String s) {
+		return s.replaceAll("%date%", plugin.getFormattedDate()).replaceAll("%time%", plugin.getFormattedTime()).replaceAll("%time_zone%", TimeZone.getTimeZone(DropletConfiguration.TIME_ZONE.getString()).getDisplayName());
 	}
 }
