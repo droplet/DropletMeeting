@@ -38,7 +38,6 @@ import org.spout.api.command.annotated.SimpleAnnotatedCommandExecutorFactory;
 import org.spout.api.command.annotated.SimpleInjector;
 import org.spout.api.plugin.CommonPlugin;
 
-import org.spout.droplet.meeting.command.DropletCommands;
 import org.spout.droplet.meeting.util.DropletConfiguration;
 import org.spout.droplet.meeting.util.MeetingLog;
 
