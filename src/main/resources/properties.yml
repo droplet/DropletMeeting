@@ -1,5 +1,10 @@
 name: DropletMeeting
-version: dev-SNAPSHOT
-website: http://spout.org
+version: ${releaseVersion} b${buildNumber}
+
+description: Group meeting "Droplet" plugin for the Spout platform to demonstrate the usage of chat, commands, and permissions.
+author: Spout LLC
+website: http://www.spout.org
+
 main: org.spout.droplet.meeting.DropletMeeting
 platform: SERVER
+reload: true
