@@ -24,10 +24,6 @@
 package org.spout.droplet.meeting.util;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
-import org.spout.api.entity.Player;
 import org.spout.api.exception.ConfigurationException;
 import org.spout.api.util.config.ConfigurationHolder;
 import org.spout.api.util.config.ConfigurationHolderConfiguration;
@@ -37,9 +33,9 @@ import org.spout.droplet.meeting.DropletMeeting;
 
 public class DropletConfiguration extends ConfigurationHolderConfiguration {
 	public static final ConfigurationHolder TIME_ZONE = new ConfigurationHolder("America/New_York", "time-zone");
-	public static final ConfigurationHolder MUTE_MESSAGE = new ConfigurationHolder("{{RED}}You don't have permission to talk during a meeting.", "mute-message");
-	public static final ConfigurationHolder START_MESSAGE = new ConfigurationHolder("{{BRIGHT_GREEN}}Meeting in progress as of %date% %time% %time_zone%", "start-message");
-	public static final ConfigurationHolder END_MESSAGE = new ConfigurationHolder("{{BRIGHT_GREEN}}Meeting adjourned as of %date% %time% %time_zone%", "end-message");
+	public static final ConfigurationHolder MUTE_MESSAGE = new ConfigurationHolder('\u00A7' + 'c' + "You don't have permission to talk during a meeting.", "mute-message");
+	public static final ConfigurationHolder START_MESSAGE = new ConfigurationHolder('\u00A7' + 'a' + "Meeting in progress as of %date% %time% %time_zone%", "start-message");
+	public static final ConfigurationHolder END_MESSAGE = new ConfigurationHolder('\u00A7' + 'a' + "Meeting adjourned as of %date% %time% %time_zone%", "end-message");
 
 	public DropletConfiguration() {
 		super(new YamlConfiguration(new File(DropletMeeting.getInstance().getDataFolder(), "config.yml")));

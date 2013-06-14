@@ -23,8 +23,6 @@
  */
 package org.spout.droplet.meeting;
 
-import org.spout.api.chat.ChatArguments;
-import org.spout.api.chat.style.ChatStyle;
 import org.spout.api.entity.Player;
 import org.spout.api.event.EventHandler;
 import org.spout.api.event.Listener;
@@ -39,19 +37,15 @@ public class DropletListener implements Listener {
 	public void playerChat(PlayerChatEvent event) {
 		Player player = event.getPlayer();
 		DropletMeeting plugin = DropletMeeting.getInstance();
-		DropletConfiguration config = plugin.getConfiguration();
 		if (plugin.isMeetingInProgress()) {
 			if (!player.hasPermission("dropletmeeting.voiced")) {
-				player.sendMessage(ChatArguments.fromString(DropletConfiguration.MUTE_MESSAGE.getString()));
+				player.sendMessage(DropletConfiguration.MUTE_MESSAGE.getString());
 				event.setCancelled(true);
 				return;
 			}
 			MeetingLog meetingLog = plugin.getMeetingLog();
 			if (meetingLog != null) {
-				ChatArguments template = event.getFormat().getArguments();
-				template.setPlaceHolder(PlayerChatEvent.NAME, new ChatArguments(player.getDisplayName()));
-				template.setPlaceHolder(PlayerChatEvent.MESSAGE, event.getMessage());
-				meetingLog.log(template.getPlainString());
+				meetingLog.log("<" + player.getDisplayName() + "> " + event.getMessage());
 			}
 		}
 	}

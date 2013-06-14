@@ -29,16 +29,13 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.spout.api.Spout;
-import org.spout.api.command.CommandRegistrationsFactory;
-import org.spout.api.command.annotated.AnnotatedCommandRegistrationFactory;
-import org.spout.api.command.annotated.SimpleAnnotatedCommandExecutorFactory;
-import org.spout.api.command.annotated.SimpleInjector;
-import org.spout.api.plugin.CommonPlugin;
+import org.spout.api.command.annotated.AnnotatedCommandExecutorFactory;
+import org.spout.api.plugin.Plugin;
 
 import org.spout.droplet.meeting.util.DropletConfiguration;
 import org.spout.droplet.meeting.util.MeetingLog;
 
-public class DropletMeeting extends CommonPlugin {
+public class DropletMeeting extends Plugin {
 	private boolean meetingInProgress;
 	private final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
 	private final DateFormat timeFormat = new SimpleDateFormat("HH.mm.ss");
@@ -58,8 +55,7 @@ public class DropletMeeting extends CommonPlugin {
 		// Register listener
 		Spout.getEngine().getEventManager().registerEvents(new DropletListener(), this);
 		// Register commands
-		CommandRegistrationsFactory<Class<?>> commandRegFactory = new AnnotatedCommandRegistrationFactory(new SimpleInjector(), new SimpleAnnotatedCommandExecutorFactory());
-		getEngine().getRootCommand().addSubCommands(this, DropletCommands.class, commandRegFactory);
+		AnnotatedCommandExecutorFactory.create(new DropletCommands());
 		getLogger().info("DropletMeeting v" + getDescription().getVersion() + " enabled.");
 	}
 

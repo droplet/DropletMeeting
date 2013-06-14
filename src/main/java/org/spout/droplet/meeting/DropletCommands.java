@@ -25,28 +25,24 @@ package org.spout.droplet.meeting;
 
 import java.util.TimeZone;
 
+import org.spout.api.Platform;
 import org.spout.api.Server;
 import org.spout.api.Spout;
-import org.spout.api.chat.ChatArguments;
-import org.spout.api.chat.style.ChatStyle;
-import org.spout.api.command.CommandContext;
+import org.spout.api.command.CommandArguments;
 import org.spout.api.command.CommandSource;
 import org.spout.api.command.annotated.Command;
-import org.spout.api.command.annotated.CommandPermissions;
-import org.spout.api.entity.Player;
+import org.spout.api.command.annotated.Permissible;
 import org.spout.api.exception.CommandException;
-import org.spout.api.plugin.Platform;
 
 import org.spout.droplet.meeting.util.DropletConfiguration;
 import org.spout.droplet.meeting.DropletMeeting;
 
 public class DropletCommands {
 	private final DropletMeeting plugin = DropletMeeting.getInstance();
-	private final DropletConfiguration config = plugin.getConfiguration();
 
 	@Command(aliases = "start", desc = "Start a meeting", min = 0, max = 0)
-	@CommandPermissions("dropletmeeting.command.start")
-	public void start(CommandContext args, CommandSource source) throws CommandException {
+	@Permissible("dropletmeeting.command.start")
+	public void start(CommandSource source, CommandArguments args) throws CommandException {
 		Platform p = Spout.getPlatform();
 		if (p != Platform.SERVER && p != Platform.PROXY) {
 			throw new CommandException("Meetings are only available in server mode.");
@@ -55,12 +51,12 @@ public class DropletCommands {
 			throw new CommandException("A meeting is already in progress!");
 		}
 		plugin.start();
-		((Server) Spout.getEngine()).broadcastMessage(ChatArguments.fromString(formatDate(DropletConfiguration.START_MESSAGE.getString())));
+		((Server) Spout.getEngine()).broadcastMessage(formatDate(DropletConfiguration.START_MESSAGE.getString()));
 	}
 
 	@Command(aliases = "end", desc = "End a meeting", min = 0, max = 0)
-	@CommandPermissions("dropletmeeting.command.end")
-	public void end(CommandContext args, CommandSource source) throws CommandException {
+	@Permissible("dropletmeeting.command.end")
+	public void end(CommandSource source, CommandArguments args) throws CommandException {
 		Platform p = Spout.getPlatform();
 		if (p != Platform.SERVER && p != Platform.PROXY) {
 			throw new CommandException("Meetings are only available in server mode.");
@@ -69,7 +65,7 @@ public class DropletCommands {
 			throw new CommandException("There is no meeting in progress!");
 		}
 		plugin.end();
-		((Server) Spout.getEngine()).broadcastMessage(ChatArguments.fromString(formatDate(DropletConfiguration.END_MESSAGE.getString())));
+		((Server) Spout.getEngine()).broadcastMessage(formatDate(DropletConfiguration.END_MESSAGE.getString()));
 	}
 
 	private String formatDate(String s) {
