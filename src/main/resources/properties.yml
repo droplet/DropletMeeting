@@ -1,10 +1,9 @@
-name: DropletMeeting
-version: ${releaseVersion} b${buildNumber}
+name: ${project.name}
+version: ${project.version}-b${buildNumber}
+description: ${project.description}
+website: ${project.url}
+author: ${project.organization.name}
 
-description: Group meeting "Droplet" plugin for the Spout platform to demonstrate the usage of chat, commands, and permissions.
-author: Spout LLC
-website: http://www.spout.org
-
-main: org.spout.droplet.meeting.DropletMeeting
-platform: SERVER
-reload: true
+main: ${project.groupId}.${project.artifactId}.${project.name}
+platform: ${platform}
+reload: ${reload}
